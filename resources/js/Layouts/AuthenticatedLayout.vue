@@ -21,8 +21,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                    />
+                                    <img src="/images/muscle.png" alt="app-logo" class="w-8 h-8">
                                 </Link>
                             </div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class UsersPageController extends Controller
 {
@@ -14,9 +15,11 @@ class UsersPageController extends Controller
     public function index()
     {
         $users = User::select('id', 'name', 'email', 'role')->get();
+        $auth_user = Auth::user();
 
         return Inertia::render('Users/Index', [
             'users' => $users,
+            'user_id' => $auth_user->role,
         ]);
     }
 
@@ -72,8 +75,9 @@ class UsersPageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(user $user)
+    public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
     }
 }
