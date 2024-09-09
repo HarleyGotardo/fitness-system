@@ -7,17 +7,16 @@ import Swal from 'sweetalert2';
 
 let form = reactive({
     name: '',
-    email: '',
-    password: '',
-    role: '',
+    description: '',
+    content: '',
 });
 
 let submit = () => {
-    router.post(route('users.store'), form, {
+    router.post(route('exercises.store'), form, {
         onSuccess: () => {
             Swal.fire({
-                title: 'User Created',
-                text: 'The user has been successfully created.',
+                title: 'Exercise Created',
+                text: 'The exercise has been successfully created.',
                 icon: 'success',
                 confirmButtonText: 'OK'
             });
@@ -25,7 +24,7 @@ let submit = () => {
         onError: () => {
             Swal.fire({
                 title: 'Error',
-                text: 'There was an error creating the user.',
+                text: 'There was an error creating the exercise.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
@@ -36,23 +35,23 @@ let submit = () => {
 </script>
 
 <template>
-    <Head title="Create User - Fiber Muscle" />
+    <Head title="Create Exercises - Fiber Muscle" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Create User</h2>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Create Exercise</h2>
             </div>
         </template>
-        
+
         <!-- Credentials Section Title -->
         <div class="flex justify-center min-h-screen mt-10">
             <div class="w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">User's Credentials</h3>
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Exercise Details</h3>
                 <form @submit.prevent="submit" class="border border-gray-300 shadow-lg p-6 rounded-lg bg-white overflow-y-auto">
                     <div class="mb-6">
                         <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="name">
-                            Name
+                            Exercise Name
                         </label>
 
                         <input
@@ -66,50 +65,33 @@ let submit = () => {
                     </div>
 
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="email">
-                            Email
+                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="description">
+                            Exercise Description
                         </label>
 
-                        <input
-                            v-model="form.email"
-                            type="email"
+                        <textarea
+                            v-model="form.description"
+                            type="text"
                             class="border border-gray-400 p-2 w-full rounded-lg"
-                            name="email"
-                            id="email"
+                            name="description"
+                            id="description"
                             required
                         />
                     </div>
 
                     <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="password">
-                            Password
+                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="content">
+                            Exercise Content
                         </label>
 
-                        <input
-                            v-model="form.password"
-                            type="password"
-                            class="border border-gray-400 p-2 w-full rounded-lg"
-                            name="password"
-                            id="password"
+                        <textarea
+                            v-model="form.content"
+                            type="text"
+                            class="border border-gray-400 p-2 w-full h-40 rounded-lg"
+                            name="content"
+                            id="content"
                             required
                         />
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="role">
-                            Role
-                        </label>
-
-                        <select
-                            v-model="form.role"
-                            class="border border-gray-400 p-2 w-full rounded-lg"
-                            name="role"
-                            id="role"
-                            required
-                        >
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
                     </div>
                     
                     <div class="mb-6">
@@ -117,7 +99,7 @@ let submit = () => {
                             type="submit"
                             class="bg-blue-400 text-white rounded-lg px-4 py-2 hover:bg-blue-500"
                         >
-                            Create User
+                            Create Exercise
                         </button>
                     </div>  
                 </form>

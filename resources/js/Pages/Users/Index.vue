@@ -1,12 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import Table from '@/Components/Table.vue';
-import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     users: Array,
     user_id: String,
+    search: String,
+    noResults: Boolean,
 });
 
 const columns = [
@@ -15,6 +16,26 @@ const columns = [
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Role' },
 ];
+
+// Form for search
+const form = useForm({
+    search: props.search || ''
+});
+
+// Function to handle search
+const handleSearch = () => {
+    form.get(route('users.index'), { preserveState: true });
+};
+
+// Show SweetAlert if no results are found
+if (props.noResults) {
+    Swal.fire({
+        title: 'No Results',
+        text: 'No users found matching your search.',
+        icon: 'info',
+        confirmButtonText: 'OK'
+    });
+}
 </script>
 
 <template>

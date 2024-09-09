@@ -12,14 +12,30 @@ class UsersPageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::select('id', 'name', 'email', 'role')->get();
         $auth_user = Auth::user();
-
+        
+        // Get the search query
+        $search = $request->input('search');
+    
+        // Get all users or filter by search query
+        $users = User::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                             ->orWhere('email', 'like', "%{$search}%")
+                             ->orWhere('role', 'like', "%{$search}%");
+            })
+            ->select('id', 'name', 'email', 'role')
+            ->get();
+    
+        $noResults = $search && $users->isEmpty();
+    
         return Inertia::render('Users/Index', [
             'users' => $users,
             'user_id' => $auth_user->role,
+            'search' => $search,
+            'noResults' => $noResults,
         ]);
     }
 
