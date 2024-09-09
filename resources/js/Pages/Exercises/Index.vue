@@ -155,7 +155,7 @@ if (props.noResults) {
             >
                 <div class="p-4 mb-4">
                     <Link :href="route('exercises.show', exercise.id)">
-                        <h3 class="text-2xl font-bold mb-2 hover:underline">{{ exercise.name }}</h3>
+                        <h3 class="text-blue-800 text-2xl font-bold mb-2 hover:underline">{{ exercise.name }}</h3>
                     </Link>
                 </div>
                 <div class="text-sm border border-gray-300 rounded-lg p-4 mb-4">
@@ -170,12 +170,15 @@ if (props.noResults) {
                 <div class="flex justify-end space-x-4">
                     <button 
                         @click="handleWorkout(exercise.id)" 
-                        :class="workoutStatus[exercise.id] ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-700'" 
+                        :class="workoutStatus[exercise.id] ? 'bg-gray-500 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-700'" 
                         :disabled="workoutStatus[exercise.id]" 
                         class="text-white px-4 py-2 rounded"
                     >
                         {{ workoutStatus[exercise.id] ? 'Worked out' : 'Work out' }}
                     </button>
+                    <Link :href="(route('exercises.show', {id: exercise.id}))" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">
+                        Details
+                    </Link>
                     <button @click="confirmDelete(exercise.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700" v-if="user_role === 'admin'">
                         Delete
                     </button>

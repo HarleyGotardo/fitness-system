@@ -38,7 +38,7 @@ const formatDateTime = (dateString) => {
       <div class="bg-white shadow-md rounded-lg p-6 w-full mb-5">
         <div class="flex justify-between">
           <div>
-            <h3 class="text-lg font-bold">{{ exercise.name }}</h3>
+            <h3 class="text-blue-800 text-lg font-bold">{{ exercise.name }}</h3>
             <p class="text-gray-600">{{ exercise_counter_count }} user(s) have worked out on this exercise.</p>
           </div>
           <div>
@@ -58,7 +58,7 @@ const formatDateTime = (dateString) => {
         <div v-for="counter in exercise_counter" :key="counter.id" class="bg-white shadow-md rounded-lg p-6 w-full mb-5">
           <div class="flex justify-between">
             <div>
-              <h3 class="text-lg font-bold">{{ counter.user.name }}</h3>
+              <h3 class="text-blue-800 text-lg font-bold">{{ counter.user.name }}</h3>
               <p class="text-gray-600">Worked out on this exercise on {{ formatDateTime(counter.created_at) }}.</p>
             </div>
             <div>

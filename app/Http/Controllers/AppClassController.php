@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\AppClass;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class ClassController extends Controller
+class AppClassController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Inertia::render('AppClasses/Index');
     }
 
     /**

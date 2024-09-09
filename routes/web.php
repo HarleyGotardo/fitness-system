@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ExercisesController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExerciseCounterController;
+use App\Http\Controllers\MealPlanController;
+use App\Http\Controllers\AppClassController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -52,6 +54,16 @@ Route::middleware('auth')->group(function () {
 
     // Exercise Counter Routes
     Route::get('/exercises/{exercise_id}/add_to_counter/{user_id}', [ExerciseCounterController::class, 'add_to_counter'])->name('exercises.add_to_counter');
+
+    // Meal Plans Routes
+    Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('meal-plans.index');
+    Route::get('/meal-plans/dinner', [MealPlanController::class, 'dinner'])->name('meal-plans.dinner');
+    Route::get('/meal-plans/breakfast', [MealPlanController::class, 'breakfast'])->name('meal-plans.breakfast');
+    Route::get('/meal-plans/lunch', [MealPlanController::class, 'lunch'])->name('meal-plans.lunch');
+    Route::get('/meal-plans/snack', [MealPlanController::class, 'snack'])->name('meal-plans.snack');
+
+    // AppClass Routes
+    Route::get('/classes', [AppClassController::class, 'index'])->name('classes.index');
 });
 
 require __DIR__.'/auth.php';
