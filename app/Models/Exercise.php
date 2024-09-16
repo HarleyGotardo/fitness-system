@@ -13,6 +13,7 @@ class Exercise extends Model
         'name',
         'description',
         'content',
+        'assigned_to',
     ];
 
     public function exercise_counter()

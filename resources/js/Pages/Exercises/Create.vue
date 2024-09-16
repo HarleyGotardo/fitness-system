@@ -5,10 +5,15 @@ import { router } from "@inertiajs/vue3";
 import { reactive } from 'vue';
 import Swal from 'sweetalert2';
 
+let props = defineProps({
+    users: Array,
+});
+
 let form = reactive({
     name: '',
     description: '',
     content: '',
+    assigned_to: ''
 });
 
 let submit = () => {
@@ -93,7 +98,26 @@ let submit = () => {
                             required
                         />
                     </div>
-                    
+
+                    <div class="mb-6">
+                        <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="assigned_to">
+                            Assign To
+                        </label>
+
+                        <select
+                            v-model="form.assigned_to"
+                            class="border border-gray-400 p-2 w-full rounded-lg"
+                            name="assigned_to"
+                            id="assigned_to"
+                            required
+                        >
+                            <option value="" disabled>Select a user</option>
+                            <option v-for="user in props.users" :key="user.id" :value="user.id">
+                                {{ user.name }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="mb-6">
                         <button
                             type="submit"

@@ -9,7 +9,8 @@ import axios from 'axios';
 let props = defineProps({
     user_id: Number,
     user_role: String,
-    exercises: Array,
+    exercises_all: Array,
+    exercises_assigned_to_you: Array,
     exercise_counters: Array,
     search: String,
     noResults: Boolean,
@@ -81,19 +82,26 @@ const handleWorkout = (exercise_id) => {
 const workoutStatus = ref({});
 
 // Initialize workout status from props
-props.exercises.forEach(exercise => {
+props.exercises_all.forEach(exercise => {
+    workoutStatus.value[exercise.id] = props.exercise_counters.includes(exercise.id);
+});
+props.exercises_assigned_to_you.forEach(exercise => {
     workoutStatus.value[exercise.id] = props.exercise_counters.includes(exercise.id);
 });
 
 // Search state
 const searchQuery = ref('');
 
+// Dropdown state
+const selectedCategory = ref('all');
+
 // Computed property to get filtered exercises
 const filteredExercises = computed(() => {
+    let exercises = selectedCategory.value === 'all' ? props.exercises_all : props.exercises_assigned_to_you;
     if (!searchQuery.value) {
-        return props.exercises;
+        return exercises;
     }
-    return props.exercises.filter(exercise => {
+    return exercises.filter(exercise => {
         return exercise.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
                exercise.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
                exercise.content.toLowerCase().includes(searchQuery.value.toLowerCase());
@@ -141,6 +149,10 @@ if (props.noResults) {
                         ></path>
                     </svg>
                 </div>
+                <select v-model="selectedCategory" class="input shadow-lg border-gray-300 px-5 py-3 rounded-xl w-56 transition-all outline-none">
+                    <option value="all">All Exercises</option>
+                    <option value="assigned">Your Exercises</option>
+                </select>
                 <Link :href="route('exercises.create')" v-if="user_role === 'admin'" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
                     Create Exercise
                 </Link>

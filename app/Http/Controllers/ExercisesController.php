@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Exercise;
 // use Illuminate\Support\Facades\Log;
 use App\Models\ExerciseCounter;
+use App\Models\User;
 
 class ExercisesController extends Controller
 {
@@ -21,7 +22,18 @@ class ExercisesController extends Controller
         $search = $request->input('search');
     
         // Get all exercises or filter by search query
-        $exercises = Exercise::query()
+        $exercises_all = Exercise::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                             ->orWhere('description', 'like', "%{$search}%")
+                             ->orWhere('content', 'like', "%{$search}%");
+            })
+            ->select('id', 'name', 'description', 'content', 'created_at')
+            ->get();
+    
+        // Get exercises assigned to the logged-in user or filter by search query
+        $exercises_assigned_to_you = Exercise::query()
+            ->where('assigned_to', $auth_user->id)
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
                              ->orWhere('description', 'like', "%{$search}%")
@@ -35,24 +47,28 @@ class ExercisesController extends Controller
             ->pluck('exercise_id')
             ->toArray();
     
-        $noResults = $search && $exercises->isEmpty();
+        $noResults = $search && $exercises_all->isEmpty() && $exercises_assigned_to_you->isEmpty();
     
         return Inertia::render('Exercises/Index', [
             'user_id' => $auth_user->id,
             'user_role' => $auth_user->role,
-            'exercises' => $exercises,
+            'exercises_all' => $exercises_all,
+            'exercises_assigned_to_you' => $exercises_assigned_to_you,
             'exercise_counters' => $exercise_counters,
             'search' => $search,
             'noResults' => $noResults,
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return Inertia::render('Exercises/Create');
+        $users = User::select('id', 'name')->get();
+
+        return Inertia::render('Exercises/Create', [
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -60,16 +76,15 @@ class ExercisesController extends Controller
      */
     public function store(Request $request)
     {
-        // validate
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'content' => ['required', 'string'],
+            'assigned_to' => ['required', 'exists:users,id'], 
         ]);
-
-        // store
+    
         Exercise::create($validatedData);
-
+    
         return redirect()->route('exercises.index');
     }
 

@@ -22,7 +22,7 @@ class MealPlanController extends Controller
         $auth_user = Auth::user();
 
         $assigned_dinner_to_auth_user = MealPlan::where('category', 'dinner')
-            ->where('user_id', $auth_user->id)
+            ->where('assigned_to', $auth_user->id)
             ->get();
 
         $dinner = MealPlan::where('category', 'dinner')->get();
@@ -40,7 +40,7 @@ class MealPlanController extends Controller
         $breakfast = MealPlan::where('category', 'breakfast')->get();
 
         $assigned_breakfast_to_auth_user = MealPlan::where('category', 'breakfast')
-            ->where('user_id', $auth_user->id)
+            ->where('assigned_to', $auth_user->id)
             ->get();
 
         return Inertia::render('MealPlans/Categories/Breakfast', [
@@ -56,7 +56,7 @@ class MealPlanController extends Controller
         $lunch = MealPlan::where('category', 'lunch')->get();
 
         $assigned_lunch_to_auth_user = MealPlan::where('category', 'lunch')
-            ->where('user_id', $auth_user->id)
+            ->where('assigned_to', $auth_user->id)
             ->get();
 
         return Inertia::render('MealPlans/Categories/Lunch', [
@@ -72,7 +72,7 @@ class MealPlanController extends Controller
         $snack = MealPlan::where('category', 'snack')->get();
 
         $assigned_snack_to_auth_user = MealPlan::where('category', 'snack')
-            ->where('user_id', $auth_user->id)
+            ->where('assigned_to', $auth_user->id)
             ->get();
 
         return Inertia::render('MealPlans/Categories/Snack', [
